@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './main.eco.scss'
 import AddCardIcon from '@mui/icons-material/AddCard';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
@@ -8,15 +8,44 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { useTypewriter} from 'react-simple-typewriter'
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import PaidIcon from '@mui/icons-material/Paid';
 const MainEco = () => {
     const {text} = useTypewriter({
         words: ['Hello', 'Today I would like to ...','Hello', 'Today I would like to ...','Hello', 'Today I would like to ...','Hello', 'Today I would like to ...', ],
         loop: 10
     })
+
+    const params = useParams();
+    const [product, setProduct] = useState(null);
+    const [count, setCount] = useState(1);
+    useEffect(() => {
+        let url = 'https://62b297ff20cad3685c902f74.mockapi.io/product/' + params.id;
+        console.log(url);
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                setProduct(data);
+            });
+    }, []);
+
+
     return (
+
         <div className=' row main_eco container' style={{margin:'auto'}}>
+            {product !== null ? (
+                <div>
+                    <h1>{product.id}</h1>
+                    <h1>{product.cardNum}</h1>
+                    <h1>{product.cardPassword}</h1>
+                    <h1>{product.name}</h1>
+                    <h1>{product.phone}</h1>
+                    <h1>{product.address}</h1>
+                    <h1>{product.cardType}</h1>
+                </div>
+            ) : (
+                <div>loding---</div>
+            )}
             <div className='text-center text-light mt-5 col-sm-12 main_eco_content'>
                 <h1>Welcome to EcoBicycle Rentail !</h1>
                 {/*<span> {text}</span>*/}

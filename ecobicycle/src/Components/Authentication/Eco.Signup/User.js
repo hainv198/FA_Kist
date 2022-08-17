@@ -1,11 +1,10 @@
-/*
 import React, {useState} from 'react';
 import axios from 'axios'
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect} from "react";
 
 const Demo = () => {
-
+    const param = useParams()
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
@@ -13,22 +12,27 @@ const Demo = () => {
     const [cardPassword, setCardPassword] = useState('')
     const [typeCard, setTypeCard] = useState('')
     const [error, setError] = useState('');
-    const [datas, setDatas] = useState('')
-
-    const handlePass = (e) => {
-        setCardPassword(e.target.value)
-    }
-    const handleNum = (e) => {
-        setCardPassword(e.target.value)
-    }
+    const [target, setTarget] = useState('')
+    const [cardNo, setCardNo] = useState([]);
+    const [cardData, setCardData] = useState([]);
 
     useEffect(() => {
         fetch('https://62b297ff20cad3685c902f74.mockapi.io/product')
             .then((res) => res.json())
             .then((res) => {
-                setDatas(res)
+                setTarget(res)
+                console.log(res)
             })
     },[])
+
+
+    /*var animal_names = []
+    if(target !== null) {
+        let animal_names = target.map((animal, index, animals) => {
+            return animal.cardNum
+        })
+        console.log(animal_names)
+    }*/
 
     const navigate = useNavigate();
 
@@ -42,31 +46,48 @@ const Demo = () => {
         if(name === '' && address === '' && phone === '') {
             return alert("Please ...")
         }
-        if(handlePass === datas.data.cardPassword && handleNum === datas.data.cardNum ) {
-            e.preventDefault()
-            console.log(name, address, phone)
-            setError('')
-            //http://localhost:8080/customer/
 
-            axios.post('https://62b297ff20cad3685c902f74.mockapi.io/product', {
-                name:name,
-                address:address,
-                phone:phone,
-                cardNum:cardNum,
-                cardPassword:cardPassword
+        // if(target !== cardNum && target !== cardPassword) {
+        //     return alert('kt lai number')
+        // }
+        e.preventDefault()
+
+        setError('')
+
+        //http://localhost:8080/customer/
+
+        axios.post('https://62b297ff20cad3685c902f74.mockapi.io/product', {
+            name:name,
+            address:address,
+            phone:phone,
+            cardNum:cardNum,
+            cardPassword:cardPassword
+        })
+            .then(result => {
+                console.log(result.data)
+                navigate(`/main/${result.data.id}`)
             })
-                .then(result => {
-                    console.log(result.data)
+            .catch(err => {
+                setError(err.message)
+                alert(err.message)
+            })
 
-                })
-                .catch(err => {
-                    setError(err.message)
-                    alert(err.message)
-                })
-            navigate('/main')
-        }
+
+       /* if(handlePass === datas.cardPassword && handleNum === datas.cardNum ) {
+
+        }else {
+            return alert('abc')
+        }*/
 
     }
+    const handlePass = (e) => {
+        setCardPassword(e.target.value)
+    }
+
+    const handleNum = (e) => {
+        setCardNum(e.target.value)
+    }
+
 
     return (
         <div style={{width:'70%', margin:'auto'}}>
@@ -113,7 +134,7 @@ const Demo = () => {
                            className="form-control"
                            id="validationCustom01"
                            value={cardNum}
-                           onChange={(e) => setCardNum(e.target.value)}
+                           onChange={handleNum}
                            required/>
                     <div className="valid-feedback">
                         Looks good!
@@ -137,7 +158,7 @@ const Demo = () => {
                            className="form-control"
                            id="validationCustom01"
                            value={cardPassword}
-                           onChange={(e) => setCardPassword(e.target.value)}
+                           onChange={handlePass}
                            required/>
                     <div className="valid-feedback">
                         Looks good!
@@ -156,11 +177,15 @@ const Demo = () => {
                     </div>
                 </div>
                 <div className="col-12">
-                    <button className="btn btn-primary" type="submit" onClick={handleLogin}>Submit form</button>
+                    <button className="btn btn-primary" type="submit" onClick={handleLogin}>
+
+                        {/*<Link to={`/main/${.id}`}>Buy</Link>*/}
+
+                    </button>
                 </div>
             </form>
         </div>
     );
 };
 
-export default Demo;*/
+export default Demo;
