@@ -9,6 +9,7 @@ import EcoMembership from "./Components/Authentication/Eco.SignIn/Membership/Eco
 
 import LoginAccount from "./Components/Authentication/Eco.Signup/LoginAccount";
 import Demo from "./Components/Authentication/Eco.Signup/User";
+import CardInfo from "./Page/CardInfo/CardInfo";
 // import Demo from "./Components/Authentication/Eco.Signup/Demo";
 function App() {
     return (
@@ -22,7 +23,7 @@ function App() {
                         <Route  path='signup/new_signin' element={<EcoMembership/>}/>
                         <Route  path='signup/new_signin/create_account' element={<Demo/>}/>
                         <Route path='main/:id' element={<MainEco/>}></Route>
-                        <Route path='main/buy_card' element={<BuyCardEco/>}></Route>
+                        <Route path='info/:id' element={<CardInfo/>}></Route>
                         <Route path='main/buy_card/prepaid' element={<Prepaid/>}></Route>
                     </Route>
                 </Routes>
